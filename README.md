@@ -116,7 +116,7 @@ Of course, this code is built on top of the previous works.
 - **Pywebrtcvad** : [[code]](https://github.com/wiseman/py-webrtcvad)
 - **ECAPA-TDNN** : [[paper]](https://arxiv.org/abs/2005.07143) [[speechbrain-pretrained-model]](https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb)
 
-[This guy](https://scholar.google.co.uk/citations?user=JJ_LQ0YAAAAJ&hl=en) developed the original code.
+[This guy](https://scholar.google.co.uk/citations?user=JJ_LQ0YAAAAJ&hl=en) developed the initial version of pipeline.
 
 ## Citation
 
