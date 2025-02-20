@@ -64,7 +64,7 @@ python diarize.py -i [PATH OF VIDEOFILE] -o [PATH OF OUTPUT DIRECTORY] --visuali
 ***Argparse arguments***
 ```
 -i, --input (default : sample/sample.mp4): input video file you want to diarize
----cache_dir (default : None): The directory to store intermediate results. If None, the cache will be stored in temporary directory made using tempfile. It will be removed after the process is finished.
+---cache_dir (default : None): The directory to store intermediate results. If None, the cache will be stored in temporary directory made using tempfile. It will be removed after the process is finished. We advise you to set this to a path where I/O operation is fast.
 ---ckpt_dir (default : None): The directory to store the model checkpoint. If None, the checkpoints will be downloaded from the internet and stored in ~/.cache/voxconverse.
 -o, --out_dir (default : output): The directory to store the output results.
 --visualize (default : False): If True, the face detection / SyncNet results will be visualized and saved in the output directory.
@@ -101,7 +101,7 @@ The outputs of this pipeline are a [rttm](https://github.com/nryant/dscore?tab=r
 2. Click **[Open a VIA project]** <img src="assets/open_project.jpg" alt="Error" style="width:25px; height:auto;" /> at the top of the pane. 
 
 3. Select the json file you want to visualize.
-4. You might see this kind of error message below. Click **Reload file** and select the original video (or video with visualization).
+4. You might see this kind of error message below. Click **Choose file** and select the original video (or video with visualization).
 
 <img src="assets/file_not_found.jpg" alt="Error" style="width:300px; height:auto;" />
 
