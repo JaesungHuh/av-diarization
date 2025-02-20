@@ -1,6 +1,6 @@
 # AV-Diarization
 This is a repository to run audio-visual speaker diarization pipeline, which was proposed in the paper "Spot the conversation : speaker diarisation in the wild" (Interspeech 2020).
-The pipeline was used to make VoxConverse dataset.
+The pipeline was used to make the VoxConverse dataset.
 
 [[arXiv]](https://arxiv.org/abs/2007.01216) [[VoxConverse]](https://github.com/joonson/voxconverse)
 
@@ -67,9 +67,9 @@ python diarize.py -i [PATH OF VIDEOFILE] -o [PATH OF OUTPUT DIRECTORY] --visuali
 ---cache_dir (default : None): The directory to store intermediate results. If None, the cache will be stored in temporary directory made using tempfile. It will be removed after the process is finished. We advise you to set this to a path where I/O operation is fast.
 ---ckpt_dir (default : None): The directory to store the model checkpoint. If None, the checkpoints will be downloaded from the internet and stored in ~/.cache/voxconverse.
 -o, --out_dir (default : output): The directory to store the output results.
---visualize (default : False): If True, the face detection / SyncNet results will be visualized and saved in the output directory.
---vad (default : pywebrtcvad): Voice activity detection model.
---speaker_model (default : resnetse34): Speaker recognition model.
+--visualize: If this flag is provided, the face detection and SyncNet results will be visualized and saved in the output directory. Otherwise, no visualization is performed.
+--vad (default : pywebrtcvad): Type of voice activity detection model.
+--speaker_model (default : resnetse34): Type of speaker recognition model.
 ```
 
 ### Original version
