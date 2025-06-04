@@ -139,19 +139,7 @@ class SyncNet(torch.nn.Module):
         im_feat = torch.cat(im_feat, 0)
         cc_feat = torch.cat(cc_feat, 0)
 
-        # ========== ==========
-        # Compute offset
-        # ========== ==========
         dists = calc_pdist(im_feat, cc_feat, vshift=self.vshift)
-        #mdist = torch.mean(torch.stack(dists, 1), 1)
-
-        #minval, minidx = torch.min(mdist, 0)
-
-        #offset = self.vshift - minidx
-        #conf = torch.median(mdist) - minval
-
-        # fdist = np.stack([dist[minidx].numpy() for dist in dists])
-        # fconf = torch.median(mdist).numpy() - fdist
 
         dists_npy = np.array([dist.numpy() for dist in dists])
 
