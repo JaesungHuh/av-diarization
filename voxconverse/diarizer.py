@@ -114,13 +114,14 @@ class Diarizer:
 
             run_v, run_s, run_l = find_runs(vadoutput)
 
-            run_s += track['track']['frame'][0]
+            # run_s += track['track']['frame'][0]
 
             for r_idx, r_v in enumerate(run_v):
                 if r_v > 0 and run_l[r_idx] > 15:
-                    time_s = float(run_s[r_idx]) / self.frame_rate
-                    time_e = float(run_s[r_idx] + run_l[r_idx]) / self.frame_rate
-                    utterances.append({'vid': '1', 'flg': 0, 'xy': [], 'z': [time_s, time_e], 's': face_id[tidx]})
+                    time_s = float(run_s[r_idx] + track['track']['frame'][0]) / self.frame_rate
+                    time_e = float(run_s[r_idx] + run_l[r_idx] + track['track']['frame'][0]) / self.frame_rate
+                    conf = float(np.mean(fconfm[run_s[r_idx]:run_s[r_idx] + run_l[r_idx]]))
+                    utterances.append({'vid': '1', 'flg': 0, 'xy': [], 'z': [time_s, time_e], 's': face_id[tidx], 'conf': conf, 'conf_type' : 'syncnet'})
 
                     midtime = (time_s + time_e) / 2
                     midfeat = min(max(0, (midtime * 5) - 5), len(spkfeats) - 1)
@@ -157,6 +158,7 @@ class Diarizer:
 
         labelname = {}
         groupname = {}
+
         for gidx, label in enumerate(range(max(labels) + 1)):
             idxlist = [keys[x] for x in np.where(labels == label)[0].tolist()]
             groupname[gidx] = 'ID_' + '/'.join(map(str, idxlist))
@@ -173,6 +175,7 @@ class Diarizer:
         for r_idx, r_v in enumerate(run_v):
             if r_v > 0 and run_l[r_idx] > 10:
                 indices = []
+                spk_sims = []
                 for frame in range(run_s[r_idx], run_s[r_idx] + run_l[r_idx]):
                     fr_feat = int(min(max(0, (frame / 5) - 5), len(spkfeats) - 1))
 
@@ -180,29 +183,28 @@ class Diarizer:
 
                     mval = torch.max(cossim)
                     midx = torch.argmax(cossim)
-
                     if mval >= self.spk_thres:
                         indices.append(labels[midx])
                     else:
                         indices.append(-1)
+                    spk_sims.append(mval.item())
 
                 indices = majority_filter_traditional(indices, 25)
 
                 run_vs, run_ss, run_ls = find_runs(indices)
-
+                
                 for rs_idx, rs_v in enumerate(run_vs):
                     time_s = float(run_s[r_idx] + run_ss[rs_idx]) / self.frame_rate
                     time_e = float(run_s[r_idx] + run_ss[rs_idx] + run_ls[rs_idx]) / self.frame_rate
-
+                    conf = np.mean(spk_sims[run_ss[rs_idx]:run_ss[rs_idx] + run_ls[rs_idx]])
                     if rs_v != -1:
                         self.data['metadata'][f'{r_idx}_{rs_idx}'] = {
-                            'vid': '1', 'flg': 0, 'xy': [], 'z': [time_s, time_e], 'av': {'1': groupname[rs_v]}
+                            'vid': '1', 'flg': 0, 'xy': [], 'z': [time_s, time_e], 'av': {'1': groupname[rs_v]}, 'conf': conf, 'conf_type' : 'spkemb'
                         }
                     else:
                         self.data['metadata'][f'{r_idx}_{rs_idx}'] = {
-                            'vid': '1', 'flg': 0, 'xy': [], 'z': [time_s, time_e], 'av': {'1': 'unknown'}
+                            'vid': '1', 'flg': 0, 'xy': [], 'z': [time_s, time_e], 'av': {'1': 'unknown'}, 'conf': conf, 'conf_type' : 'spkemb'
                         }
-
         self.data["file"]["1"]["src"] = str(origfile)
 
         # Store the json file

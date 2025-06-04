@@ -143,14 +143,14 @@ class SyncNet(torch.nn.Module):
         # Compute offset
         # ========== ==========
         dists = calc_pdist(im_feat, cc_feat, vshift=self.vshift)
-        mdist = torch.mean(torch.stack(dists, 1), 1)
+        #mdist = torch.mean(torch.stack(dists, 1), 1)
 
-        minval, minidx = torch.min(mdist, 0)
+        #minval, minidx = torch.min(mdist, 0)
 
-        offset = self.vshift - minidx
-        conf = torch.median(mdist) - minval
+        #offset = self.vshift - minidx
+        #conf = torch.median(mdist) - minval
 
-        fdist = np.stack([dist[minidx].numpy() for dist in dists])
+        # fdist = np.stack([dist[minidx].numpy() for dist in dists])
         # fconf = torch.median(mdist).numpy() - fdist
 
         dists_npy = np.array([dist.numpy() for dist in dists])
@@ -158,7 +158,7 @@ class SyncNet(torch.nn.Module):
         # Remove temp directory
         rmtree(temp_dir)
 
-        return offset.numpy(), conf.numpy(), dists_npy
+        return dists_npy
 
     def run(self) -> List[np.ndarray]:
         logging.info("Running syncnet...")
@@ -169,7 +169,7 @@ class SyncNet(torch.nn.Module):
         dists = []
 
         for idx, fname in enumerate(flist):
-            offset, conf, dist = self.evaluate(videofile=fname)
+            dist = self.evaluate(videofile=fname)
             dists.append(dist)
 
             diagval = []
