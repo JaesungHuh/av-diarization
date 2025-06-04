@@ -53,45 +53,24 @@ class AVDiarizer():
         os.makedirs(out_dir, exist_ok=True)
         
         # Preprocess
-        # preprocessor = Preprocessor(cache_dir, ckpt_dir, device)
-        # tracks = preprocessor.run(in_file)
+        preprocessor = Preprocessor(cache_dir, ckpt_dir, device)
+        tracks = preprocessor.run(in_file)
 
-        # # Syncnet
-        # syncnet = SyncNet(cache_dir, ckpt_dir, device)
-        # dists = syncnet.run()
-        # import pickle
+        # Syncnet
+        syncnet = SyncNet(cache_dir, ckpt_dir, device)
+        dists = syncnet.run()
 
-        # with open(os.path.join(cache_dir, "dists.pckl"), "wb") as f:
-        #     pickle.dump(dists, f)
+        # Face cluster
+        face_clusterer = FaceCluster(cache_dir, ckpt_dir, device)
+        face_ids = face_clusterer.run(tracks)
 
-        # # Face cluster
-        # face_clusterer = FaceCluster(cache_dir, ckpt_dir, device)
-        # face_ids = face_clusterer.run(tracks)
+        # Vad
+        vad = Vad(cache_dir, ckpt_dir, self.args.vad, device)
+        vadres = vad.run()
 
-        # # Vad
-        # vad = Vad(cache_dir, ckpt_dir, self.args.vad, device)
-        # vadres = vad.run()
-
-        # # Speaker embedding extractor
-        # spknet = SpeakerNet(cache_dir, ckpt_dir, self.args.speaker_model, device)
-        # spkfeats = spknet.run()
-        import pickle
-        with open(os.path.join(cache_dir, "tracks.pckl"), "rb") as f:
-            tracks = pickle.load(f)
-
-        with open(os.path.join(cache_dir, "dists.pckl"), "rb") as f:
-            dists = pickle.load(f)  
-
-        with open(os.path.join(cache_dir, "vadres.pckl"), "rb") as f:
-            vadres = pickle.load(f)
-
-        with open(os.path.join(cache_dir, "face_ids.pckl"), "rb") as f:
-            face_ids = pickle.load(f)
-
-        with open(os.path.join(cache_dir, "spkfeats.pckl"), "rb") as f:
-            spkfeats = pickle.load(f)
-            
-        # import ipdb; ipdb.set_trace()
+        # Speaker embedding extractor
+        spknet = SpeakerNet(cache_dir, ckpt_dir, self.args.speaker_model, device)
+        spkfeats = spknet.run()
 
         # Diarizer using the results from the previous steps
         diarizer = Diarizer(cache_dir, self.args.out_dir)
