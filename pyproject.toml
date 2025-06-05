@@ -16,9 +16,7 @@ dependencies = [
     "torch==2.4.0", "webrtcvad", "numpy", "scipy", 
     "speechbrain", "scikit-learn", "torchaudio==2.4.0", 
     "scenedetect==0.6.5", "wave", "python-speech-features",
-    "opencv-python", "tqdm", "pysoundfile",
-    "wespeaker @ git+https://github.com/wenet-e2e/wespeaker.git"
-
+    "opencv-python", "tqdm", "pysoundfile"
 ]
 
 [project.urls]

@@ -61,8 +61,6 @@ class Visualizer:
             sf = 1
 
         fhb = int(sf * fh / 40)
-        # Removed unused variable 'fts'
-        # fts = float(fhb) / 60
 
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         vOut = cv2.VideoWriter(vonly_file, fourcc, self.frame_rate, (fw, fh))
@@ -89,10 +87,10 @@ class Visualizer:
                 )
                 cv2.putText(
                     image,
-                    'TR %d, ID %d' % (face['track'], face['identity']),
+                    f"TR {face['track']}, ID {face['identity']} CONF {face['conf']:.2f}",
                     (int(face['x'] - face['s']), int(face['y'] - face['s'])),
                     cv2.FONT_HERSHEY_SIMPLEX,
-                    0.75,
+                    0.5,
                     (255, 255, 255),
                     2
                 )

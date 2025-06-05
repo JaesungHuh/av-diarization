@@ -5,7 +5,7 @@ import os
 import logging
 import tempfile
 import argparse
-
+import pickle
 from typing import Optional
 
 from .preprocessor import Preprocessor
@@ -48,7 +48,9 @@ class AVDiarizer():
             # Create the temporary directory and remove this at the end of the 
             temp_dir = tempfile.TemporaryDirectory()
             cache_dir = temp_dir.name
-        
+        else:
+            if os.path.exists(cache_dir):
+                raise FileExistsError(f"Cache directory {cache_dir} already exists")
         os.makedirs(cache_dir, exist_ok=True)
         os.makedirs(out_dir, exist_ok=True)
         
@@ -56,7 +58,8 @@ class AVDiarizer():
         preprocessor = Preprocessor(cache_dir, ckpt_dir, device)
         tracks = preprocessor.run(in_file)
 
-        # Syncnet
+
+        # # Syncnet
         syncnet = SyncNet(cache_dir, ckpt_dir, device)
         dists = syncnet.run()
 
