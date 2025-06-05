@@ -368,7 +368,7 @@ class Preprocessor:
         # Process tracks
         for ii, track in enumerate(alltracks):
             vidtracks.append(self.crop_video(track, os.path.join(self.crop_dir, f'{ii:05d}')))
-        # import ipdb; ipdb.set_trace()
+
         return vidtracks
 
 

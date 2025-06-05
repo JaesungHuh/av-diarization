@@ -58,8 +58,7 @@ class AVDiarizer():
         preprocessor = Preprocessor(cache_dir, ckpt_dir, device)
         tracks = preprocessor.run(in_file)
 
-
-        # # Syncnet
+        # Syncnet
         syncnet = SyncNet(cache_dir, ckpt_dir, device)
         dists = syncnet.run()
 
